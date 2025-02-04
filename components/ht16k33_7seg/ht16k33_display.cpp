@@ -108,7 +108,7 @@ float HT16K337SegDisplay::get_brightness() {
 }
 
 void HT16K337SegDisplay::print(const char *str) {
-  uint16_t fontc = 0;
+  uint8_t fontc = 0;
   while (*str != '\0') {
     uint8_t c = *reinterpret_cast<const uint8_t *>(str++);
     if (c > 127)
@@ -117,10 +117,10 @@ void HT16K337SegDisplay::print(const char *str) {
       fontc = pgm_read_word(&alphafonttable[c]);
     c = *reinterpret_cast<const uint8_t *>(str);
     if (c == '.') {
-      fontc |= 0x4000;
+      fontc |= 0x40;
       str++;
     }
-    this->buffer_.push_back(fontc & 0xff);
+    this->buffer_.push_back(fontc & 0xf);
     this->buffer_.push_back(fontc >> 8);
   }
 }
