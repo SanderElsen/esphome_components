@@ -68,7 +68,7 @@ void HT16K337SegDisplay::display_() {
   }
   pos = 0;
   for (auto *display : this->displays_) {
-    display->write_bytes(DISPLAY_COMMAND_SET_DDRAM_ADDR, data + pos, 8);
+    display->write_bytes(DISPLAY_COMMAND_SET_DDRAM_ADDR, data + pos, 16);
     pos += 8;
   }
 }
@@ -108,7 +108,7 @@ float HT16K337SegDisplay::get_brightness() {
 }
 
 void HT16K337SegDisplay::print(const char *str) {
-  uint8_t fontc = 0;
+  uint16_t fontc = 0;
   while (*str != '\0') {
     uint8_t c = *reinterpret_cast<const uint8_t *>(str++);
     if (c > 127)
@@ -121,7 +121,7 @@ void HT16K337SegDisplay::print(const char *str) {
       str++;
     }
     this->buffer_.push_back(fontc & 0xff);
-    this->buffer_.push_back(fontc >> 8);
+    //this->buffer_.push_back(0x00);
   }
 }
 
