@@ -53,7 +53,7 @@ void HT16K337SegDisplay::loop() {
 float HT16K337SegDisplay::get_setup_priority() const { return setup_priority::PROCESSOR; }
 
 void HT16K337SegDisplay::display_() {
-  int numc = this->displays_.size() * 8;
+  int numc = this->displays_.size() * 10;
   int len = this->buffer_.size();
   uint8_t data[numc];
   memset(data, 0, numc);
@@ -120,8 +120,8 @@ void HT16K337SegDisplay::print(const char *str) {
       fontc |= 0x4;
       str++;
     }
-    this->buffer_.push_back((fontc) & 0xff);
-    //this->buffer_.push_back(0x00);
+    this->buffer_.push_back(fontc & 0xff);
+    this->buffer_.push_back(fontc>>8);
   }
 }
 
