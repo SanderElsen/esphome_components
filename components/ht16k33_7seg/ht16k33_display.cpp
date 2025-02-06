@@ -120,7 +120,7 @@ void HT16K337SegDisplay::print(const char *str) {
       fontc |= 0x4;
       str++;
     }
-    this->buffer_.push_back(0x00);
+    this->buffer_.push_back(0x18);
     this->buffer_.push_back(0xff);
   }
 }
