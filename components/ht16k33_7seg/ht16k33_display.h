@@ -54,7 +54,7 @@ class HT16K337SegDisplay : public PollingComponent, public i2c::I2CDevice {
   unsigned long scroll_dwell_ {2000};
   unsigned long scroll_delay_ {750};
   unsigned long last_scroll_ {0};
-  std::vector<uint8_t> buffer_;
+  std::vector<uint16_t> buffer_;
   int offset_ {0};
   uint8_t brightness_ = 16;
 };
