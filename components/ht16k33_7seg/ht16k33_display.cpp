@@ -30,7 +30,7 @@ void HT16K337SegDisplay::setup() {
 
 void HT16K337SegDisplay::loop() {
   unsigned long now = millis();
-  int numc = this->displays_.size() * 8;
+  int numc = this->displays_.size() * 10;
   int len = this->buffer_.size();
   if (!this->scroll_ || (len <= numc))
     return;
