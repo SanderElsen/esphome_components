@@ -83,7 +83,7 @@ namespace esphome
       pos = 0;
       for (auto *display : this->displays_)
       {
-        display->write_bytes_16(DISPLAY_COMMAND_SET_DDRAM_ADDR, data + pos, 2);
+        display->write_bytes_16(DISPLAY_COMMAND_SET_DDRAM_ADDR, data + pos, N_COLS);
         pos += N_COLS;
       }
     }
@@ -133,21 +133,20 @@ namespace esphome
     void HT16K337SegDisplay::print(const char *str)
     {
       uint16_t fontc = 0;
-      int fontSize = 8;
       while (*str != '\0')
       {
         uint16_t c = *reinterpret_cast<const uint8_t *>(str++);
         if (c > 127)
           fontc = 0;
         else
-          fontc = alphafonttable[c]<<(16-fontSize);
+          fontc = (pgm_read_word(&alphafonttable[c])<<8);
         c = *reinterpret_cast<const uint8_t *>(str);
         if (c == '.')
         {
           fontc |= 0x4;
           str++;
         }
-        this->buffer_.push_back(0);
+        this->buffer_.push_back(fontc);
       }
     }
 
