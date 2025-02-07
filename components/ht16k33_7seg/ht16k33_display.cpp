@@ -24,8 +24,9 @@ namespace esphome
 
 
 
-    static const bool colDef[] = {true,true,false,true,true};
-    static const int N_COLS = sizeof(colDef);
+    static const bool ACTIVE_COLS[] = {true,true,false,true,true};
+    static const int COL_COUNT = colDef.length;
+    static const int CHAR_COL_COUNT = colDef.filter(true).length;
 
     void HT16K337SegDisplay::setup()
     {
@@ -40,14 +41,14 @@ namespace esphome
     void HT16K337SegDisplay::loop()
     {
       unsigned long now = millis();
-      int numc = this->displays_.size() * N_COLS;
-      int len = this->buffer_.size();
-      if (!this->scroll_ || (len <= numc))
+      int characterCount = this->displays_.size() * CHAR_COL_COUNT;
+      int bufferLength = this->buffer_.size();
+      if (!this->scroll_ || (bufferLength <= characterCount))
         return;
       if ((this->offset_ == 0) && (now - this->last_scroll_ < this->scroll_delay_))
         return;
-      if ((!this->continuous_ && (this->offset_ + numc >= len)) ||
-          (this->continuous_ && (this->offset_ > len - 2)))
+      if ((!this->continuous_ && (this->offset_ + characterCount >= bufferLength)) ||
+          (this->continuous_ && (this->offset_ > bufferLength - 1)))
       {
         if (this->continuous_ || (now - this->last_scroll_ >= this->scroll_dwell_))
         {
@@ -58,7 +59,7 @@ namespace esphome
       }
       else if (now - this->last_scroll_ >= this->scroll_speed_)
       {
-        this->offset_ += 1;
+        this->offset_++;
         this->last_scroll_ = now;
         this->display_();
       }
@@ -68,15 +69,17 @@ namespace esphome
 
     void HT16K337SegDisplay::display_()
     {
-      int numc = this->displays_.size() * N_COLS;
-      int len = this->buffer_.size();
-      uint16_t data[numc ];
-      memset(data, 0, numc);
+      int dataCount = this->displays_.size() * COL_COUNT;
+      int characterCount = this->displays_.size() * CHAR_COL_COUNT;
+      int bufferLength = this->buffer_.size();
+      uint16_t data[dataCount];
+      memset(data, 0, dataCount);
       int pos = this->offset_;
-      for (int i = 0; i < numc ; i ++, pos++)
+      for (int i = 0; i < dataCount ; i ++)
       {
         if (!colDef[i])
         {
+          data[i] = 0;
           continue;
         }
         if (pos >= len)
@@ -85,24 +88,24 @@ namespace esphome
             break;
           pos %= len;
         }
-        data[i] = this->buffer_[pos];
+        data[i] = this->buffer_[pos++];
       }
       pos = 0;
       for (auto *display : this->displays_)
       {
-        display->write_bytes_16(DISPLAY_COMMAND_SET_DDRAM_ADDR, data + pos, N_COLS);
-        pos += N_COLS;
+        display->write_bytes_16(DISPLAY_COMMAND_SET_DDRAM_ADDR, data + pos, COL_COUNT);
+        pos += COL_COUNT;
       }
     }
 
     void HT16K337SegDisplay::update()
     {
-      int prev_fill = this->buffer_.size();
+      int prev_bufferLength = this->buffer_.size();
       this->buffer_.clear();
       this->call_writer();
-      int numc = this->displays_.size() * N_COLS;
-      int len = this->buffer_.size();
-      if ((this->scroll_ && (prev_fill != len) && !this->continuous_) || (len <= numc))
+      int characterCount = this->displays_.size() * CHAR_COL_COUNT;
+      int bufferLength = this->buffer_.size();
+      if ((this->scroll_ && (prev_bufferLength != bufferLength) && !this->continuous_) || (bufferLength <= characterCount))
       {
         this->last_scroll_ = millis();
         this->offset_ = 0;
