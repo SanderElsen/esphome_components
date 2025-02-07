@@ -83,7 +83,7 @@ namespace esphome
       pos = 0;
       for (auto *display : this->displays_)
       {
-        display->write_bytes_16(DISPLAY_COMMAND_SET_DDRAM_ADDR, data + pos, N_COLS);
+        display->write_bytes_16(DISPLAY_COMMAND_SET_DDRAM_ADDR, data + pos, 16);
         pos += N_COLS;
       }
     }
