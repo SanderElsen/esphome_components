@@ -146,8 +146,6 @@ namespace esphome
           str++;
         }
         this->buffer_.push_back(fontc);
-        printf("%04x\n",fontc);
-        // this->buffer_.push_back(fontc);
       }
     }
 
