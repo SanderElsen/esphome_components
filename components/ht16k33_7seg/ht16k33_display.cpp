@@ -133,20 +133,21 @@ namespace esphome
     void HT16K337SegDisplay::print(const char *str)
     {
       uint16_t fontc = 0;
+      int fontSize = 8;
       while (*str != '\0')
       {
         uint16_t c = *reinterpret_cast<const uint8_t *>(str++);
         if (c > 127)
           fontc = 0;
         else
-          fontc = alphafonttable[c];
+          fontc = alphafonttable[c]<<(16-fontSize);
         c = *reinterpret_cast<const uint8_t *>(str);
         if (c == '.')
         {
           fontc |= 0x4;
           str++;
         }
-        this->buffer_.push_back(fontc);
+        this->buffer_.push_back(0);
       }
     }
 
