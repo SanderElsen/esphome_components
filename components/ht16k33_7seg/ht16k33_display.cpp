@@ -77,7 +77,7 @@ namespace esphome
       int pos = this->offset_;
       for (int i = 0; i < dataCount ; i ++)
       {
-        if (!colDef[i])
+        if (!ACTIVE_COLS[i])
         {
           data[i] = 0;
           continue;
