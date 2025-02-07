@@ -39,7 +39,7 @@ namespace esphome
       unsigned long now = millis();
       int numc = this->displays_.size() * N_COLS;
       int len = this->buffer_.size();
-      if (!this->scroll_ || (len <= numc))
+      if (!this->scroll_ || (len < numc))
         return;
       if ((this->offset_ == 0) && (now - this->last_scroll_ < this->scroll_delay_))
         return;
