@@ -25,8 +25,8 @@ namespace esphome
 
 
     static const bool ACTIVE_COLS[] = {true,true,false,true,true};
-    static const int COL_COUNT = ACTIVE_COLS.length;
-    static const int CHAR_COL_COUNT = ACTIVE_COLS.filter(true).length;
+    static const int COL_COUNT = sizeof(ACTIVE_COLS);
+    static const int CHAR_COL_COUNT = 4
 
     void HT16K337SegDisplay::setup()
     {
