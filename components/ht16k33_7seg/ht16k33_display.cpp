@@ -55,8 +55,8 @@ float HT16K337SegDisplay::get_setup_priority() const { return setup_priority::PR
 void HT16K337SegDisplay::display_() {
   int numc = this->displays_.size() * 10;
   int len = this->buffer_.size();
-  uint16_t data[numc];
-  memset(data, 0, numc);
+  uint8_t data[numc*2];
+  memset(data, 0, numc*2);
   int pos = this->offset_;
   for (int i = 0; i < numc; i++, pos++) {
     if (pos >= len) {
@@ -65,6 +65,7 @@ void HT16K337SegDisplay::display_() {
       pos %= len;
     }
     data[i] = this->buffer_[pos];
+    data[i+1] = this->buffer_[pos+1];
   }
   pos = 0;
   for (auto *display : this->displays_) {
