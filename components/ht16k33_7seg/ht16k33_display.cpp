@@ -24,7 +24,7 @@ namespace esphome
 
 
 
-    const bool[5] colDef = {true,true,false,true,true};
+    static const bool colDef[] = {true,true,false,true,true};
     static const int N_COLS = colDef.size();
 
     void HT16K337SegDisplay::setup()
