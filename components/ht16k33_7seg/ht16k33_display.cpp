@@ -22,7 +22,7 @@ namespace esphome
     static const uint8_t DISPLAY_COMMAND_DISPLAY_ON = 0x81;
     static const uint8_t DISPLAY_COMMAND_DIMMING = 0xE0;
 
-    static const int N_ROWS = 5;
+    static const int N_COLS = 5;
 
     void HT16K337SegDisplay::setup()
     {
@@ -37,7 +37,7 @@ namespace esphome
     void HT16K337SegDisplay::loop()
     {
       unsigned long now = millis();
-      int numc = this->displays_.size() * N_ROWS;
+      int numc = this->displays_.size() * N_COLS;
       int len = this->buffer_.size();
       if (!this->scroll_ || (len <= numc))
         return;
@@ -65,7 +65,7 @@ namespace esphome
 
     void HT16K337SegDisplay::display_()
     {
-      int numc = this->displays_.size() * N_ROWS;
+      int numc = this->displays_.size() * N_COLS;
       int len = this->buffer_.size();
       uint16_t data[numc ];
       memset(data, 0, numc);
@@ -78,13 +78,13 @@ namespace esphome
             break;
           pos %= len;
         }
-        data[i] = 0xffff;//this->buffer_[pos];
+        data[i] = this->buffer_[pos];
       }
       pos = 0;
       for (auto *display : this->displays_)
       {
-        display->write_bytes_16(DISPLAY_COMMAND_SET_DDRAM_ADDR, data + pos, N_ROWS);
-        pos += N_ROWS;
+        display->write_bytes_16(DISPLAY_COMMAND_SET_DDRAM_ADDR, data + pos, N_COLS);
+        pos += N_COLS;
       }
     }
 
@@ -93,7 +93,7 @@ namespace esphome
       int prev_fill = this->buffer_.size();
       this->buffer_.clear();
       this->call_writer();
-      int numc = this->displays_.size() * N_ROWS;
+      int numc = this->displays_.size() * N_COLS;
       int len = this->buffer_.size();
       if ((this->scroll_ && (prev_fill != len) && !this->continuous_) || (len <= numc))
       {
