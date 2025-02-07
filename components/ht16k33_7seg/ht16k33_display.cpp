@@ -78,7 +78,7 @@ namespace esphome
             break;
           pos %= len;
         }
-        data[i] = this->buffer_[pos];
+        data[i] = 0xffff;//this->buffer_[pos];
       }
       pos = 0;
       for (auto *display : this->displays_)
