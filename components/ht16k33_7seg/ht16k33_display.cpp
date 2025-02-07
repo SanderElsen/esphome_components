@@ -22,6 +22,8 @@ namespace esphome
     static const uint8_t DISPLAY_COMMAND_DISPLAY_ON = 0x81;
     static const uint8_t DISPLAY_COMMAND_DIMMING = 0xE0;
 
+    static const uint8_t N_ROWS = 5;
+
     void HT16K337SegDisplay::setup()
     {
       for (auto *display : this->displays_)
@@ -35,7 +37,7 @@ namespace esphome
     void HT16K337SegDisplay::loop()
     {
       unsigned long now = millis();
-      int numc = this->displays_.size() * 5;
+      int numc = this->displays_.size() * N_ROWS;
       int len = this->buffer_.size();
       if (!this->scroll_ || (len <= numc))
         return;
@@ -63,12 +65,12 @@ namespace esphome
 
     void HT16K337SegDisplay::display_()
     {
-      int numc = this->displays_.size() * 5; // 5
-      int len = this->buffer_.size(); // 5
-      uint8_t data[numc * 2]; // data[10]
-      memset(data, 0, numc * 2); // [0,0,0,0,0,0,0,0,0,0]
-      int pos = this->offset_; // 0
-      for (int i = 0; i < numc * 2; i += 2, pos++) // i 0,2,4,6,8 | pos 0,1,2,3,4
+      int numc = this->displays_.size() * N_ROWS;
+      int len = this->buffer_.size();
+      uint8_t data[numc * 2];
+      memset(data, 0, numc * 2);
+      int pos = this->offset_;
+      for (int i = 0; i < numc * 2; i += 2, pos++)
       {
         if (pos >= len)
         {
@@ -76,13 +78,13 @@ namespace esphome
             break;
           pos %= len;
         }
-        data[i] = this->buffer_[pos]; // i 0,2,4,6,8 | pos 0,1,2,3,4
-        data[i + 1] = this->buffer_[pos]; // i 1,3,5,7,9 | pos 0,1,2,3,4
+        data[i] = this->buffer_[pos];
+        data[i + 1] = this->buffer_[pos];
       }
       pos = 0;
       for (auto *display : this->displays_)
       {
-        display->write_bytes(DISPLAY_COMMAND_SET_DDRAM_ADDR, data + pos, 10);
+        display->write_bytes(DISPLAY_COMMAND_SET_DDRAM_ADDR, data + pos, N_ROWS*2);
         pos += 8;
       }
     }
@@ -92,7 +94,7 @@ namespace esphome
       int prev_fill = this->buffer_.size();
       this->buffer_.clear();
       this->call_writer();
-      int numc = this->displays_.size() * 5;
+      int numc = this->displays_.size() * N_ROWS;
       int len = this->buffer_.size();
       if ((this->scroll_ && (prev_fill != len) && !this->continuous_) || (len <= numc))
       {
