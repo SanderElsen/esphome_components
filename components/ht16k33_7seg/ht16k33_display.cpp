@@ -135,12 +135,12 @@ namespace esphome
       uint16_t fontc = 0;
       while (*str != '\0')
       {
-        uint16_t c = *reinterpret_cast<const uint16_t *>(str++);
+        uint16_t c = *reinterpret_cast<const uint8_t *>(str++);
         if (c > 127)
           fontc = 0;
         else
           fontc = pgm_read_word(&alphafonttable[c]);
-        c = *reinterpret_cast<const uint16_t *>(str);
+        c = *reinterpret_cast<const uint8_t *>(str);
         if (c == '.')
         {
           fontc |= 0x4;
