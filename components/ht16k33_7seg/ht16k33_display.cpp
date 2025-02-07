@@ -22,7 +22,10 @@ namespace esphome
     static const uint8_t DISPLAY_COMMAND_DISPLAY_ON = 0x81;
     static const uint8_t DISPLAY_COMMAND_DIMMING = 0xE0;
 
-    static const int N_COLS = 5;
+
+
+    static const int[] colDef = {true,true,false,true,true}
+    static const int N_COLS = colDef.size();
 
     void HT16K337SegDisplay::setup()
     {
@@ -72,6 +75,10 @@ namespace esphome
       int pos = this->offset_;
       for (int i = 0; i < numc ; i ++, pos++)
       {
+        if (!colDef[i])
+        {
+          continue;
+        }
         if (pos >= len)
         {
           if (!this->continuous_)
