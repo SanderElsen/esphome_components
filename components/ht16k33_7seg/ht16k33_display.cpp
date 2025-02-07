@@ -22,7 +22,7 @@ namespace esphome
     static const uint8_t DISPLAY_COMMAND_DISPLAY_ON = 0x81;
     static const uint8_t DISPLAY_COMMAND_DIMMING = 0xE0;
 
-    static const uint8_t N_ROWS = 5;
+    static const int N_ROWS = 5;
 
     void HT16K337SegDisplay::setup()
     {
