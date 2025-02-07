@@ -67,10 +67,10 @@ namespace esphome
     {
       int numc = this->displays_.size() * N_ROWS;
       int len = this->buffer_.size();
-      uint8_t data[numc * 2];
-      memset(data, 0, numc * 2);
+      uint16_t data[numc ];
+      memset(data, 0, numc);
       int pos = this->offset_;
-      for (int i = 0; i < numc * 2; i += 2, pos++)
+      for (int i = 0; i < numc ; i ++, pos++)
       {
         if (pos >= len)
         {
@@ -79,13 +79,12 @@ namespace esphome
           pos %= len;
         }
         data[i] = this->buffer_[pos];
-        data[i + 1] = this->buffer_[pos];
       }
       pos = 0;
       for (auto *display : this->displays_)
       {
-        display->write_bytes(DISPLAY_COMMAND_SET_DDRAM_ADDR, data + pos, N_ROWS*2);
-        pos += 8;
+        display->write_bytes_16(DISPLAY_COMMAND_SET_DDRAM_ADDR, data + pos, N_ROWS);
+        pos += N_ROWS;
       }
     }
 
