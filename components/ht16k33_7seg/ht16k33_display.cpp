@@ -30,7 +30,7 @@ void HT16K337SegDisplay::setup() {
 
 void HT16K337SegDisplay::loop() {
   unsigned long now = millis();
-  int numc = this->displays_.size() * 10;
+  int numc = this->displays_.size() * 5;
   int len = this->buffer_.size();
   if (!this->scroll_ || (len <= numc))
     return;
@@ -53,12 +53,12 @@ void HT16K337SegDisplay::loop() {
 float HT16K337SegDisplay::get_setup_priority() const { return setup_priority::PROCESSOR; }
 
 void HT16K337SegDisplay::display_() {
-  int numc = this->displays_.size() * 10;
+  int numc = this->displays_.size() * 5;
   int len = this->buffer_.size();
   uint8_t data[numc*2];
   memset(data, 0, numc*2);
   int pos = this->offset_;
-  for (int i = 0; i < numc; i++, pos++) {
+  for (int i = 0; i < numc; i++, pos+=2) {
     if (pos >= len) {
       if (!this->continuous_)
         break;
@@ -69,8 +69,8 @@ void HT16K337SegDisplay::display_() {
   }
   pos = 0;
   for (auto *display : this->displays_) {
-    display->write_bytes(DISPLAY_COMMAND_SET_DDRAM_ADDR, data + pos, 16);
-    pos += 16;
+    display->write_bytes(DISPLAY_COMMAND_SET_DDRAM_ADDR, data + pos, 8);
+    pos += 8;
   }
 }
 
