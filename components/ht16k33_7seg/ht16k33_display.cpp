@@ -58,7 +58,7 @@ namespace esphome
       }
       else if (now - this->last_scroll_ >= this->scroll_speed_)
       {
-        this->offset_ += 2;
+        this->offset_ += 1;
         this->last_scroll_ = now;
         this->display_();
       }
