@@ -65,7 +65,7 @@ void HT16K337SegDisplay::display_() {
       pos %= len;
     }
     data[i] = this->buffer_[pos];
-    data[i+1] = this->buffer_[pos];
+    data[i+1] = this->buffer_[pos] << 8;
   }
   pos = 0;
   for (auto *display : this->displays_) {
@@ -78,7 +78,7 @@ void HT16K337SegDisplay::update() {
   int prev_fill = this->buffer_.size();
   this->buffer_.clear();
   this->call_writer();
-  int numc = this->displays_.size() * 8;
+  int numc = this->displays_.size() * 5;
   int len = this->buffer_.size();
   if ((this->scroll_ && (prev_fill != len) && !this->continuous_) || (len <= numc)) {
     this->last_scroll_ = millis();
