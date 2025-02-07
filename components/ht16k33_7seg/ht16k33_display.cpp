@@ -25,8 +25,8 @@ namespace esphome
 
 
     static const bool ACTIVE_COLS[] = {true,true,false,true,true};
-    static const int COL_COUNT = colDef.length;
-    static const int CHAR_COL_COUNT = colDef.filter(true).length;
+    static const int COL_COUNT = ACTIVE_COLS.length;
+    static const int CHAR_COL_COUNT = ACTIVE_COLS.filter(true).length;
 
     void HT16K337SegDisplay::setup()
     {
@@ -82,11 +82,11 @@ namespace esphome
           data[i] = 0;
           continue;
         }
-        if (pos >= len)
+        if (pos >= bufferLength)
         {
           if (!this->continuous_)
             break;
-          pos %= len;
+          pos %= bufferLength;
         }
         data[i] = this->buffer_[pos++];
       }
