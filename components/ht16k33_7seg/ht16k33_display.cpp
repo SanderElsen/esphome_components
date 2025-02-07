@@ -58,14 +58,14 @@ void HT16K337SegDisplay::display_() {
   uint8_t data[numc*2];
   memset(data, 0, numc*2);
   int pos = this->offset_;
-  for (int i = 0; i < numc; i+=2, pos+=2) {
+  for (int i = 0; i < numc*2; i+=2, pos++) {
     if (pos >= len) {
       if (!this->continuous_)
         break;
       pos %= len;
     }
     data[i] = this->buffer_[pos];
-    data[i+1] = this->buffer_[pos+1];
+    data[i+1] = this->buffer_[pos];
   }
   pos = 0;
   for (auto *display : this->displays_) {
