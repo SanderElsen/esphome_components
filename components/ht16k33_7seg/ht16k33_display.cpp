@@ -139,7 +139,7 @@ namespace esphome
         if (c > 127)
           fontc = 0;
         else
-          fontc = pgm_read_word(&alphafonttable[c]);
+          fontc = alphafonttable[c];
         c = *reinterpret_cast<const uint8_t *>(str);
         if (c == '.')
         {
