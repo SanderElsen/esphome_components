@@ -86,7 +86,7 @@ namespace esphome
         {
           if (!this->continuous_)
             data[i] = 0; 
-            break;
+            continue;
           pos %= bufferLength;
         }
         data[i] = this->buffer_[pos++];
