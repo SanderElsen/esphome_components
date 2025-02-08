@@ -22,9 +22,7 @@ namespace esphome
     static const uint8_t DISPLAY_COMMAND_DISPLAY_ON = 0x81;
     static const uint8_t DISPLAY_COMMAND_DIMMING = 0xE0;
 
-
-
-    static const bool ACTIVE_COLS[] = {true,true,false,true,true};
+    static const bool ACTIVE_COLS[] = {true, true, false, true, true};
     static const int COL_COUNT = sizeof(ACTIVE_COLS);
     static const int CHAR_COL_COUNT = 4;
 
@@ -75,7 +73,7 @@ namespace esphome
       uint16_t data[dataCount];
       memset(data, 0, dataCount);
       int pos = this->offset_;
-      for (int i = 0; i < dataCount ; i ++)
+      for (int i = 0; i < dataCount; i++)
       {
         if (!ACTIVE_COLS[i])
         {
@@ -85,8 +83,8 @@ namespace esphome
         if (pos >= bufferLength)
         {
           if (!this->continuous_)
-            data[i] = 0; 
-            continue;
+            data[i] = 0;
+          continue;
           pos %= bufferLength;
         }
         data[i] = this->buffer_[pos++];
@@ -150,11 +148,11 @@ namespace esphome
         if (c > 127)
           fontc = 0;
         else
-          fontc = (pgm_read_word(&alphafonttable[c])<<8);
+          fontc = (pgm_read_word(&alphafonttable[c]) << 8);
         c = *reinterpret_cast<const uint8_t *>(str);
         if (c == '.')
         {
-          fontc |= 0x8000;
+          fontc |= (1 << 15);
           str++;
         }
         this->buffer_.push_back(fontc);
