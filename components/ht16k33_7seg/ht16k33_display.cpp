@@ -154,7 +154,7 @@ namespace esphome
         c = *reinterpret_cast<const uint8_t *>(str);
         if (c == '.')
         {
-          fontc |= 0x4000;
+          fontc |= 0x8000;
           str++;
         }
         this->buffer_.push_back(fontc);
