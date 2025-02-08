@@ -85,6 +85,7 @@ namespace esphome
         if (pos >= bufferLength)
         {
           if (!this->continuous_)
+            data[i] = 0; 
             break;
           pos %= bufferLength;
         }
